@@ -11,9 +11,9 @@ controls.enableDamping = true; // for smooth interaction
 controls.dampingFactor = 0.05;
 
 // Add a light source
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 5, 5).normalize();
-scene.add(light);
+const ambientLight = new THREE.AmbientLight(0x404040); // Color: soft white
+scene.add(ambientLight);
+
 
 // Load the 3D model
 const loader = new THREE.GLTFLoader();
