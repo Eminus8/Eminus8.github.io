@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Title 1</title>
+    <style>
+        body { font-family: Times New Roman, sans-serif; margin: 0; padding: 20px; }
+        .assembly {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+        #model-viewer { width: 100%; height: 500px; background-color: #eee; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Project Title 1</h1>
+<p>Date: January 1, 2024</p>
+<p>Detailed description of the project goes here.</p>
+
+<h2>Main Assembly and Subassemblies</h2>
+<ul>
+    <li class="assembly" onclick="loadModel('assets/full arm v2.gltf')">Main Assembly</li>
+    <li class="assembly" onclick="loadModel('subassembly1.gltf')">Subassembly 1</li>
+    <li class="assembly" onclick="loadModel('subassembly2.gltf')">Subassembly 2</li>
+    <!-- Add more subassemblies as needed -->
+</ul>
+
+<div id="model-viewer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+    let scene, camera, renderer, controls, currentModel;
+
+    function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('model-viewer').appendChild(renderer.domElement);
+
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 5, 5).normalize();
+        scene.add(light);
+
+        camera.position.z = 5;
+
+        animate();
+    }
+
+    function loadModel(modelPath) {
+        if (currentModel) {
+            scene.remove(currentModel);
+        }
+
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+            `assets/${modelPath}`,
+            function (gltf) {
+                currentModel = gltf.scene;
+                scene.add(gltf.scene);
+            },
+            undefined,
+            function (error) {
+                console.error(error);
+            }
+        );
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    init();
+</script>
+
+</body>
+</html>
