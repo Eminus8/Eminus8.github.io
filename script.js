@@ -1,40 +1,29 @@
-// Set up the scene, camera, and renderer
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const openButton = document.getElementById('openOverlay');
+    const overlay = document.getElementById('overlay');
+    const closeButton = document.querySelector('.close-btn');
 
-// Set up orbit controls
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // for smooth interaction
-controls.dampingFactor = 0.05;
-
-// Add a light source
-const ambientLight = new THREE.AmbientLight(0x404040); // Color: soft white
-scene.add(ambientLight);
-
-
-// Load the 3D model
-const loader = new THREE.GLTFLoader();
-loader.load(
-    'assets/full arm v2.gltf', // Path to your model
-    function (gltf) {
-        scene.add(gltf.scene);
-    },
-    undefined,
-    function (error) {
-        console.error(error);
+    // Function to open the overlay
+    function openOverlay() {
+        overlay.style.display = 'block';
     }
-);
 
-// Set the camera position
-camera.position.z = 5;
+    // Function to close the overlay
+    function closeOverlay() {
+        overlay.style.display = 'none';
+    }
 
-// Animation loop
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
-    renderer.render(scene, camera);
-}
-animate();
+    // Event listener to open the overlay
+    openButton.addEventListener('click', openOverlay);
+
+    // Event listener to close the overlay when clicking the close button
+    closeButton.addEventListener('click', closeOverlay);
+
+    // Event listener to close the overlay when clicking outside the content
+    window.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            closeOverlay();
+        }
+    });
+});
