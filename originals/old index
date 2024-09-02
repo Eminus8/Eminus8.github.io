@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Overlay Example</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Button</title>
+    <link rel="stylesheet" href="styles.css">    
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .fancy-button {
+            position: relative;
+            background-color: #008cba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        .fancy-button:hover {
+            background-color: #005f7f;
+        }
+
+        .fancy-button .panel {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 150px; /* Panel width */
+            background-color: #005f7f;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            height: 100%; /* Match button height */
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .fancy-button:hover .panel {
+            display: block;
+            transform: translateX(0);
+        }
+    </style>
+    <title>Fancy Buttons with Panels</title>
+
+
+</head>
+
+
+<body>
+
+    <!-- Button to open the overlay -->
+    <button id="openOverlay" class = "openOverlay">Open Overlay</button>
+
+    <!-- The overlay -->
+    <div id="overlay" class="overlay">
+        <div class="overlay-content">
+            <span class="close-btn">&times;</span>
+            <h2>Overlay Title</h2>
+            <p>This is a simple overlay. You can add more content here.</p>
+        </div>
+    </div>
+
+    <div class="banner">
+        SHEKAR WORDEN<br>
+        CAD<br>
+        PORTFOLIO<br>
+    </div>
+
+    <button class="fancy-button" style = "position:absolute; top: 200px; left: 200px;">bruh</button>
+
+    <div class="button-container">
+        <button class="fancy-button" style = "position:absolute; top: 300px; left: 300px;">Fancy Button 1</button>
+        <div class="fancy-panel">Fancy Panel 1</div>
+    </div>
+
+    <div class="button-container">
+        <button class="fancy-button" style = "position:absolute; top: 500px; left: 500px;">Fancy Button 2</button>
+        <div class="fancy-panel">Fancy Panel 2</div>
+    </div>
+
+    <button class="fancy-button" style = "position:absolute; top: 600px; left: 600px;">Hover Me!</button>
+
+    <script src="script.js"></script>
+
+
+    <button class="fancy-button">
+        Hover Me!
+        <div class="panel">
+            Panel Content 1
+        </div>
+    </button>
+
+    <button class="fancy-button">
+        Hover Me Too!
+        <div class="panel">
+            Panel Content 2
+        </div>
+    </button>
+</body>
+</html>

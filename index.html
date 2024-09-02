@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Overlay Example</title>
+    <title>Basic Layout</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js"></script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fancy Button</title>
-    <link rel="stylesheet" href="styles.css">    
+
 </head>
 
-
 <body>
+    <a href="INSERTLINKHERE" class="fancy-button" style="position: relative; top: 200px; left: 2%;">L-button</a>
+    <button class="L-button">L-button</button>
 
-<!-- Button to open the overlay -->
-<button id="openOverlay" class = "openOverlay">Open Overlay</button>
+    <div class="circle"></div>
 
-<!-- The overlay -->
-<div id="overlay" class="overlay">
-    <div class="overlay-content">
-        <span class="close-btn">&times;</span>
-        <h2>Overlay Title</h2>
-        <p>This is a simple overlay. You can add more content here.</p>
+    <!-- O-button -->
+    <a href="#" class="o-button" style="position: relative; top: 800px; left: 2%;">O-button</a>
+
+    <!-- Overlay -->
+    <div id="overlay1">
+        <div class="overlay-content">
+            <span class="close-btn">&times;</span>
+            <div id="3d-model-container"></div>
+        </div>
     </div>
-</div>
 
-<button class="fancy-button">Hover Me!</button>
+    <!-- Include Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Your custom JavaScript -->
+    <script src="scripts.js"></script>
+    <!-- End of O-button-->
 
-<script src="script.js"></script>
 </body>
+
 </html>

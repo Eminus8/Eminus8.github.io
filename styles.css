@@ -1,17 +1,140 @@
-/* styles.css */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-    
-    background-image: url('assets/homepage background.jpg'); /* Path to your image */
-    background-size: cover; /* Scale the image to cover the entire page */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */    
+/* General Styles */
+:root
+{
+    --bannerColor: gray;
+    --backgroundColor: white;
 
 }
 
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-color: black;
+    background-color: var(--backgroundColor);
+}
+
+/* Header Styles */
+.banner{
+    position:fixed;
+    width: 100vw;
+    background-color: var(--bannerColor);
+    color: black;
+    padding: 20px;
+    text-align: center;
+    
+}
+
+.banner::after 
+{
+    content: "";
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: 20px; /* Height of the fading effect */
+    background: linear-gradient(to bottom,  rgba(255, 255, 255, 0),rgba(255, 255, 255, 1) ); /* Gradient from transparent to white */
+    z-index: 1001;
+}
+
+
+.L-button {
+    position:absolute;
+
+    background-color: #4CAF50; /* Green background */
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    z-index: 2;
+}
+
+.L-button:hover {
+    position:absolute;
+
+    background-color: #45a049; /* Darker green on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow on hover */
+    transform: translateY(-2px); /* Slightly raise the button */
+
+    z-index: 1;
+}
+
+.fancy-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none; /* Remove underline from link */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.fancy-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow on hover */
+    transform: translateY(-2px); /* Slightly raise the button */
+}
+
+.circle {
+    position:absolute;
+
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+
+    z-index: 0;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Button Styles */
+.o-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.o-button:hover {
+    background-color: #0056b3;
+}
+
+/* Overlay Styles */
 #overlay {
     display: none; /* Hidden by default */
     position: fixed;
@@ -19,59 +142,33 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
-    z-index: 1000; /* Ensures it's on top of other content */
-}
-
-.openOverlay{
-
-    position: absolute;
-    left: 50vw;
-    transform: translate(-50%,0);
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    z-index: 1000; /* Ensure overlay is on top */
 }
 
 .overlay-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
     width: 80%;
-    max-width: 700px;
-    height: 700px;
-    text-align: center;
+    height: 80%;
+    margin: 5% auto; /* Center the content */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden; /* Hide overflow */
 }
 
+#3d-model-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Close Button Styles */
 .close-btn {
     position: absolute;
     top: 10px;
-    right: 20px;
+    right: 10px;
     font-size: 24px;
     cursor: pointer;
+    color: black;
 }
 
-.fancy-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.fancy-button:hover {
-    transform: translateY(-5px);
-    background-color: #0056b3;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.fancy-button:active {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
