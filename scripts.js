@@ -1,135 +1,76 @@
-// script.js
-document.addEventListener('DOMContentLoaded', () => {
-    const openButton = document.getElementById('openOverlay');
+document.querySelector('.O-button').addEventListener('click', function () {
     const overlay = document.getElementById('overlay');
-    const closeButton = document.querySelector('.close-btn');
-
-    // Function to open the overlay
-    function openOverlay() {
-        overlay.style.display = 'block';
-    }
-
-    // Function to close the overlay
-    function closeOverlay() {
-        overlay.style.display = 'none';
-    }
-
-    // Event listener to open the overlay
-    openButton.addEventListener('click', openOverlay);
-
-    // Event listener to close the overlay when clicking the close button
-    closeButton.addEventListener('click', closeOverlay);
-
-    // Event listener to close the overlay when clicking outside the content
-    window.addEventListener('click', (event) => {
-        if (event.target === overlay) {
-            closeOverlay();
-        }
-    });
+    overlay.style.display = 'block';
+    backdrop.style.display = 'block';
+    create3DDisplay('assets/full arm v2.gltf', '3d-container');
 });
 
-// JavaScript to handle overlay
-document.addEventListener('DOMContentLoaded', function() {
+document.querySelector('.close-btn').addEventListener('click', function () {
     const overlay = document.getElementById('overlay');
-    const oButton = document.querySelector('.o-button');
-    const closeBtn = document.querySelector('.close-btn');
-
-    // Show the overlay when the O-button is clicked
-    oButton.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default anchor behavior
-        overlay.style.display = 'block'; // Show the overlay
-        create3DDisplay('overlay1', 'assets/full arm v2.gltf');
-    });
-
-    // Hide the overlay when the close button is clicked
-    closeBtn.addEventListener('click', function() {
-        overlay.style.display = 'none'; // Hide the overlay
-    });
+    overlay.style.display = 'none';
+    backdrop.style.display = 'none';
+    const container = document.getElementById('3d-container');
+    while (container.firstChild) {
+        container.removeChild(container.firstChild); // Clear the 3D scene
+    }
 });
 
-// Function to initialize the 3D model with Three.js
-function init3DModel() {
-    // Set up the scene, camera, and renderer
+function create3DDisplay(modelPath, containerId) {
+    const container = document.getElementById(containerId);
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth/2, window.innerHeight/2);
-    document.body.appendChild(renderer.domElement);
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    container.appendChild(renderer.domElement);
+    scene.background = new THREE.Color(0xadd8e6);
 
-    // Set up orbit controls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // for smooth interaction
-    controls.dampingFactor = 0.05;
+/*
+                // Compute the bounding box of the model
+                const box = new THREE.Box3().setFromObject(modelPath);
 
-    // Add a light source
-    const ambientLight = new THREE.AmbientLight(0x404040); // Color: soft white
+                // Get the center and size of the bounding box
+                const center = new THREE.Vector3();
+                const size = new THREE.Vector3();
+                box.getCenter(center);
+                box.getSize(size);
+
+                // Position the camera based on the bounding box
+                const distance = Math.max(size.x, size.y, size.z) * 1.5; // Adjust this multiplier as needed
+                camera.position.set(center.x, center.y, distance);
+                camera.lookAt(center);
+
+                // Set the controls target to the center of the model
+                controls.target.set(center.x, center.y, center.z);
+*/
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0);
     scene.add(ambientLight);
 
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 10, 7.5).normalize();
+    scene.add(directionalLight);
 
-    // Load the 3D model
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+
     const loader = new THREE.GLTFLoader();
-    loader.load(
-        'assets/full arm v2.gltf', // Path to your model
-        function (gltf) {
-            scene.add(gltf.scene);
-        },
-        undefined,
-        function (error) {
-            console.error(error);
-        }
-    );
-
-    // Set the camera position
-    camera.position.z = 5;
-
-    // Animation loop
-    
-    function animate() {
-        requestAnimationFrame(animate);
-        controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
-        renderer.render(scene, camera);
-    }
-    animate();
-}
-
-function create3DDisplay(overlayId, modelPath) {
-    const overlay = document.getElementById(overlayId);
-
-    // Clear any existing content in the overlay
-    overlay.innerHTML = '';
-
-    // Create a new div for the 3D display
-    const displayContainer = document.createElement('div');
-    displayContainer.style.width = '90%'; // 90% of the overlay width
-    displayContainer.style.height = '90%'; // 90% of the overlay height
-    displayContainer.style.margin = '5%'; // Margin between the display and overlay edges
-    overlay.appendChild(displayContainer);
-
-    // Set up the Three.js scene, camera, and renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, displayContainer.clientWidth / displayContainer.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(displayContainer.clientWidth, displayContainer.clientHeight);
-    displayContainer.appendChild(renderer.domElement);
-
-    // Load the 3D model
-    const loader = new THREE.GLTFLoader();
-    loader.load(modelPath, function(gltf) {
-        scene.add(gltf.scene);
-        animate();
+    loader.load(modelPath, function (gltf) {
+        const model = gltf.scene;
+        scene.add(model);
+        model.position.set(0, -5, 0);
+        camera.position.set(10, 10, 10);
+        camera.lookAt(model.position);
     });
 
-    camera.position.z = 5;
-
-    // Animation loop
     function animate() {
         requestAnimationFrame(animate);
+        controls.update();
         renderer.render(scene, camera);
     }
-
-    // Start rendering
     animate();
 }
-    
-
-

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Display</title>
+    <style>
+        body { margin: 0; }
+        #model-container {
+            width: 80%;  /* Change this value to adjust the width */
+            height: 80vh;  /* Change this value to adjust the height */
+            margin: auto;
+            border: 1px solid #ccc;
+        }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="model-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        scene.background = new THREE.Color(0xf0f0f0); // Light gray background
+        
+        // Set renderer size based on container size
+        const container = document.getElementById('model-container');
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        // Orbit controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        // Lighting
+        const light = new THREE.DirectionalLight(0xffffff, 0.5);
+        light.position.set(5, 10, 7.5);
+        scene.add(light);
+
+        // Load the GLTF model
+        const loader = new THREE.GLTFLoader();
+        loader.load('assets/full arm v2.gltf', function (gltf) {
+            scene.add(gltf.scene);
+            gltf.scene.scale.set(2, 2, 2);  // Adjust scale if needed
+            gltf.scene.position.set(0, 0, 0);  // Adjust position if needed
+            animate();
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        // Camera position
+        camera.position.z = 5;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
