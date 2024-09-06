@@ -1,8 +1,23 @@
+/*
 document.querySelector('.O-button').addEventListener('click', function () {
     const overlay = document.getElementById('overlay');
     overlay.style.display = 'block';
     backdrop.style.display = 'block';
     create3DDisplay('assets/full arm v2.gltf', '3d-container');
+});
+*/
+
+document.querySelectorAll('.O-button').forEach(button => {
+    button.addEventListener('click', function () {
+        const modelPath = this.getAttribute('data-model');
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+        backdrop.style.display = 'block';
+        /*
+        document.getElementById('backdrop').style.display = 'block';
+        */
+        create3DDisplay(modelPath, '3d-container');
+    });
 });
 
 document.querySelector('.close-btn').addEventListener('click', function () {
@@ -25,7 +40,7 @@ function create3DDisplay(modelPath, containerId) {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
-    scene.background = new THREE.Color(0xadd8e6);
+    scene.background = new THREE.Color(0xFFFFFF);
 
 /*
                 // Compute the bounding box of the model
