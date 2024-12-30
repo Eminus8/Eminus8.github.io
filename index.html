@@ -1,29 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Model Overlay</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>glug nuggus</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>  
+  <style>
+    body {margin: 0; overflow: hidden;}
+    canvas {display: block;}
+  </style>
 </head>
+
 <body>
+  <script>
+    // Scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add light
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 10, 7.5);
+    scene.add(light);
     
-    
-    <button class="O-button" data-model="assets/full_arm_v2.gltf">arm file</button>
 
-    <button class="O-button" data-model="assets/drivetrain_motor_mount.gltf">angle file</button>
+    // Add OrbitControls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // Smooth motion
+    controls.dampingFactor = 0.1; // Damping inertia
+    controls.screenSpacePanning = false; // Pan only when right-clicking
 
-    <div id="overlay" class="overlay">
-        <span class="close-btn">&times;</span>
-        <div id="3d-container" class="display-container"></div>
-    </div>
+    // Load GLTF model
+    const loader = new THREE.GLTFLoader();
+    loader.load('assets/full_arm_v2.gltf', function (gltf) {
+        const model = gltf.scene;
 
+        // Compute the bounding box
+        const box = new THREE.Box3().setFromObject(model);
 
-    <div id="backdrop"></div>
+        // Find the center of the bounding box
+        const center = new THREE.Vector3();
+        box.getCenter(center);
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="scripts.js"></script>
+        // Reposition the model so its center is at (0, 0, 0)
+        model.position.x -= center.x;
+        model.position.y -= center.y;
+        model.position.z -= center.z;
+
+        // Optionally add wireframe
+        ///*
+        model.traverse((child) => {
+          if (child.isMesh) {
+            const wireframeGeometry = new THREE.EdgesGeometry(child.geometry);
+            const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+            const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+            child.add(wireframe);
+          }
+        });
+        //*/ 
+        scene.add(model);
+    });
+
+    // Camera position
+    camera.position.set(5, 5, 5); // Adjust to fit the scene
+    controls.update();
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Update controls
+      controls.update();
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resizing
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
 </body>
 </html>
